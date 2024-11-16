@@ -1,0 +1,26 @@
+# Default Docker Compose file for local development
+version: '3.8'
+services:
+  bot_backend:
+    build:
+      context: ./api
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://user:password@db/botdb
+    depends_on:
+      - db
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+  db:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=botdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:
